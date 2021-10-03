@@ -1,10 +1,11 @@
 import requests
+from typing import Dict, Any
 
 from .JoySoundSearchQuery import JoySoundSearchQuery
 from .JoySoundSearchErrorData import JoySoundSearchErrorData
 
 
-def search_joysound(query: JoySoundSearchQuery):
+def search_joysound(query: JoySoundSearchQuery) -> Dict[str, Any]:
     kindCnt = len(query.filters)
 
     payload = {
