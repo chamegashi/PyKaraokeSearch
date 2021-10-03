@@ -5,7 +5,7 @@ from .JoySoundSearchQuery import JoySoundSearchQuery
 from .JoySoundSearchErrorData import JoySoundSearchErrorData
 
 
-def search_joysound(query: JoySoundSearchQuery) -> Dict[str, Any]:
+def search_joysound(query: JoySoundSearchQuery, timeout: float = None) -> Dict[str, Any]:
     kindCnt = len(query.filters)
 
     payload = {
@@ -32,7 +32,7 @@ def search_joysound(query: JoySoundSearchQuery) -> Dict[str, Any]:
         'x-jsp-app-name': '0000800'
     }
 
-    res = requests.post(api_url, headers=headers, data=payload)
+    res = requests.post(api_url, headers=headers, data=payload, timeout=timeout)
     if res.status_code != 200:
         raise Exception(JoySoundSearchErrorData(
             response=res,

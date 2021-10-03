@@ -6,7 +6,7 @@ from .ClubDamSearchQuery import ClubDamSearchQuery
 from .ClubDamSearchErrorData import ClubDamSearchErrorData
 
 
-def search_clubdam(query: ClubDamSearchQuery) -> Dict[str, Any]:
+def search_clubdam(query: ClubDamSearchQuery, timeout: float = None) -> Dict[str, Any]:
     # https://www.clubdam.com/karaokesearch/
     api_url = 'https://www.clubdam.com/dkwebsys/search-api/SearchVariousByKeywordApi'
 
@@ -28,7 +28,7 @@ def search_clubdam(query: ClubDamSearchQuery) -> Dict[str, Any]:
         'sort': query.sort,
     }
 
-    res = requests.post(api_url, headers=headers, data=json.dumps(payload, ensure_ascii=False))
+    res = requests.post(api_url, headers=headers, data=json.dumps(payload, ensure_ascii=False), timeout=timeout)
     if res.status_code != 200:
         raise Exception(ClubDamSearchErrorData(
             response=res,
