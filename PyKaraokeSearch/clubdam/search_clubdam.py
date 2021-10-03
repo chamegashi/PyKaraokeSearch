@@ -28,7 +28,7 @@ def search_clubdam(query: ClubDamSearchQuery, timeout: float = None) -> Dict[str
         'sort': query.sort,
     }
 
-    res = requests.post(api_url, headers=headers, data=json.dumps(payload, ensure_ascii=False), timeout=timeout)
+    res = requests.post(api_url, headers=headers, data=json.dumps(payload, ensure_ascii=False).encode('utf-8'), timeout=timeout)
     if res.status_code != 200:
         raise Exception(ClubDamSearchErrorData(
             response=res,
