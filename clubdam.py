@@ -1,31 +1,18 @@
-import json
-import requests
+from PyKaraokeSearch import search_clubdam, ClubDamSearchQuery
 
-api_url = 'https://www.clubdam.com/dkwebsys/search-api/SearchVariousByKeywordApi'
+if __name__ == '__main__':
+    import json
+    import argparse
 
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36',
-    'Content-Type': 'application/json',
-}
+    parser = argparse.ArgumentParser()
+    parser.add_argument('keyword', type=str)
+    parser.add_argument('-o', '--output_path', type=str)
+    args = parser.parse_args()
 
-payload = {
-    'authKey': '2/Qb9R@8s*',
-    'compId': '1',
-    'contentsCode': None,
-    'dispCount': '100',
-    'keyword': 'Starlight',
-    'modelTypeCode': '1',
-    'pageNo': '1',
-    'serialNo': 'AT00001',
-    'serviceCode': None,
-    'sort': '2', # 1: 50音順, 2: 人気順
-}
+    keyword = args.keyword
+    output_path = args.output_path
 
-res = requests.post(api_url, headers=headers, data=json.dumps(payload))
+    result = search_clubdam(ClubDamSearchQuery(keyword=keyword))
 
-data = res.json()
-status = data.get('result', {}).get('statusCode')
-
-print(res.status_code)
-print(status)
-print(data)
+    with open(output_path if output_path else 0, 'w') as fp:
+        json.dump(result, fp, ensure_ascii=False)

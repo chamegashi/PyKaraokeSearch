@@ -6,3 +6,10 @@ from .joysound import (
     JoySoundSearchQueryField,
     JoySoundSearchErrorData,
 )
+
+from .clubdam import (
+    search_clubdam,
+    ClubDamSearchQuery,
+    ClubDamSearchQueryField,
+    ClubDamSearchErrorData,
+)
