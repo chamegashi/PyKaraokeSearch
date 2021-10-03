@@ -13,4 +13,5 @@ from .clubdam import (
     ClubDamSearchQuery,
     ClubDamSearchQueryField,
     ClubDamSearchErrorData,
+    make_clubDam_responce,
 )

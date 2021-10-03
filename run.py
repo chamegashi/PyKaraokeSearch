@@ -3,7 +3,7 @@ from flask import Flask, jsonify, request
 
 from PyKaraokeSearch import search_joysound, JoySoundSearchQuery, make_joysound_responce
 from PyKaraokeSearch import JoySoundSearchQueryField as QF
-from PyKaraokeSearch import search_clubdam, ClubDamSearchQuery
+from PyKaraokeSearch import search_clubdam, ClubDamSearchQuery, make_clubDam_responce
 
 
 
@@ -13,8 +13,6 @@ app = Flask(__name__)
 def search_keyword():
 	if request.method == 'GET':
 		keyword = request.args.get('keyword')
-
-		print(keyword)
 
 		if not keyword:
 			return jsonify({"status": "error", "message": "なんか文字入れて"})
@@ -32,9 +30,9 @@ def search_keyword():
 		joyResponce = make_joysound_responce(joyResult)
 
 		damResult = search_clubdam(ClubDamSearchQuery(keyword=keyword))
+		damResponce = make_clubDam_responce(damResult)
 
-		return jsonify({"joyResult": joyResponce, "status": "ok"})
-		# return jsonify({"damResult" : damResult, "joyResult": joyResult, "status": "ok"})
+		return jsonify({"damResponce" : damResponce, "joyResponce": joyResponce, "status": "ok"})
 	else:
 		return jsonify({"status": "error", "message": "POST やん..."})
 
