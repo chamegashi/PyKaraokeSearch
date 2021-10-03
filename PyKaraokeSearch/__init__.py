@@ -5,6 +5,7 @@ from .joysound import (
     JoySoundSearchQuery,
     JoySoundSearchQueryField,
     JoySoundSearchErrorData,
+    make_joysound_responce,
 )
 
 from .clubdam import (

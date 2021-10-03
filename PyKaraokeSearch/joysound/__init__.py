@@ -2,3 +2,4 @@ from .JoySoundSearchQuery import JoySoundSearchQuery
 from . import JoySoundSearchQueryField
 from .JoySoundSearchErrorData import JoySoundSearchErrorData
 from .search_joysound import search_joysound
+from .make_joysound_responce import make_joysound_responce
