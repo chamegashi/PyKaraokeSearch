@@ -36,6 +36,10 @@ def search_keyword():
 	else:
 		return jsonify({"status": "error", "message": "POST やん..."})
 
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 if __name__ == "__main__":
 	app.run(debug=True)
