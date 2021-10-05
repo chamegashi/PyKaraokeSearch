@@ -17,5 +17,5 @@ class JoySoundSearchQuery:
     sort: Sort = 'popular'
     order: Order = 'desc'
     start: int = 1
-    count: int = 20
+    count: int = 100
     apiVer: ApiVer = '1.0'

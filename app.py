@@ -22,9 +22,10 @@ def search_keyword():
 			filters=[
 				QF.Filter(
 					kind='compound',
-					word=keyword,
+					word=word,
 					match="partial",
 				)
+				for word in keyword.split(" ")
 			]
 		))
 		joyResponce = make_joysound_responce(joyResult)
