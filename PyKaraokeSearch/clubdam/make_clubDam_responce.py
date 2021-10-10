@@ -7,7 +7,8 @@ def make_clubDam_responce(damContents) -> List[Dict[str, str]]:
     for DContent in damContents['list']:
         contents.append({
             "artist" : DContent['artist'],
-            "song" : DContent['title']
+            "song" : DContent['title'],
+            "songId" : DContent['requestNo'],
         })
 
     return contents
