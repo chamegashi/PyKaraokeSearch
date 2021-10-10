@@ -8,7 +8,7 @@ def make_joysound_responce(JoySoundContents) -> List[Dict[str, str]]:
         contents.append({
             "artist" : JContent['artistName'],
             "song" : JContent['songName'],
-            "songID" : JContent['naviGroupId'],
+            "songId" : JContent['naviGroupId'],
         })
 
     return contents
