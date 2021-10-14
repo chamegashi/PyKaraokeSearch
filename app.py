@@ -5,7 +5,7 @@ from PyKaraokeSearch import search_joysound, JoySoundSearchQuery, make_joysound_
 from PyKaraokeSearch import JoySoundSearchQueryField as QF
 from PyKaraokeSearch import search_clubdam, ClubDamSearchQuery, make_clubDam_responce
 
-
+from GetKeyRange import keySearch
 
 app = Flask(__name__)
 
@@ -36,6 +36,20 @@ def search_keyword():
 		return jsonify({"damResponce" : damResponce, "joyResponce": joyResponce, "status": "ok"})
 	else:
 		return jsonify({"status": "error", "message": "POST やん..."})
+
+@app.route('/api/getKey', methods={'GET'})
+def get_key():
+	if request.method == 'GET':
+		keywords = request.args.get('keywords')
+		if not keywords:
+			return jsonify({"status": "error", "message": "なんか文字入れて"})
+		
+		res = keySearch.searchKey(keywords)
+
+		return jsonify({"data" : res, "status": "ok"})
+	else:
+		return jsonify({"status": "error", "message": "POST やん..."})
+
 
 @app.after_request
 def after_request(response):
