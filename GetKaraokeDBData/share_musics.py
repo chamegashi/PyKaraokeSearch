@@ -120,3 +120,35 @@ def updateMusic(music):
     except Exception as e:
         print(traceback.format_exc())
         return {"result": False, "message": "--- update error ---\n" + traceback.format_exc()}
+
+
+def updateIsAvailable(music):
+    try:
+        connect = psycopg2.connect(
+            "host=" + os.getenv('DBHOST') + " " +
+            "password=" + os.getenv('DBPASS') + " " +
+            "dbname=" + "karaoke" + " " +
+            "user=" + os.getenv('DBUSER') + " "
+        )
+        cur = connect.cursor()
+
+        date = convertDateToString(datetime.datetime.now())
+        cur.execute("""
+                    UPDATE share_musics
+                        SET is_available_msy = %s,
+                            is_available_gil = %s,
+                            is_available_fulu = %s,
+                            modified = %s
+                        WHERE id=%s""",
+                    (
+                        music["is_available_msy"],
+                        music["is_available_gil"],
+                        music["is_available_fulu"],
+                        str(date),
+                        music["id"],
+                    ))
+        connect.commit()
+        return {"result": True, "message": ""}
+    except Exception as e:
+        print(traceback.format_exc())
+        return {"result": False, "message": "--- update error ---\n" + traceback.format_exc()}

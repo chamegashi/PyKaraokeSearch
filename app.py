@@ -5,7 +5,7 @@ from PyKaraokeSearch import search_joysound, JoySoundSearchQuery, make_joysound_
 from PyKaraokeSearch import JoySoundSearchQueryField as QF
 from PyKaraokeSearch import search_clubdam, ClubDamSearchQuery, make_clubDam_responce
 
-from GetKaraokeDBData import getMusic, registMusic, getShareMusic, registShareMusic
+from GetKaraokeDBData import getMusic, registMusic, getShareMusic, registShareMusic, updateIsAvailable
 from GetKeyRange import keySearch
 
 app = Flask(__name__)
@@ -108,6 +108,22 @@ def regist_share_music():
 
     result = registShareMusic(data)
     return jsonify({"result": result,  "status": "ok"})
+
+
+@app.route('/api/share_music/update_is_avialable', methods=['POST'])
+def update_is_avialable():
+    if request.method != 'POST':
+        return jsonify({"status": "error", "message": "POST じゃないやん..."})
+
+    data = {
+        "id": request.form.get('id'),
+        "is_available_msy": request.form.get('is_available_msy'),
+        "is_available_gil": request.form.get('is_available_gil'),
+        "is_available_fulu": request.form.get('is_available_fulu'),
+    }
+
+    result = updateIsAvailable(data)
+    return jsonify(result)
 
 
 @app.after_request
