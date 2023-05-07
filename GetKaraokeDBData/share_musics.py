@@ -24,11 +24,11 @@ def getShareMusic():
 """_summary_
 
 music key
-id, title, hiragana, artist, key, max_key, max_score, user_id
+id, title, hiragana, artist, key, max_key, is_available_msy, is_available_gil, is_available_fulu
 """
 
 
-def registMusic(music):
+def registShareMusic(music):
     try:
         connect = psycopg2.connect(
             "host=" + os.getenv('DBHOST') + " " +
@@ -42,13 +42,13 @@ def registMusic(music):
         cur.execute("INSERT INTO share_musics VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     (
                         str(uuid.uuid4()),
-                        music["music_name"],
-                        music["music_name_hira"],
+                        music["title"],
+                        music["hiragana"],
                         music["artist"],
-                        music["key"],
                         music["max_key"],
-                        music["max_score"],
-                        music["user_id"],
+                        music["is_available_msy"],
+                        music["is_available_gil"],
+                        music["is_available_fulu"],
                         str(date),
                         str(date),
                     ))

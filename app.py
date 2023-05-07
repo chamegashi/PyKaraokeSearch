@@ -5,7 +5,7 @@ from PyKaraokeSearch import search_joysound, JoySoundSearchQuery, make_joysound_
 from PyKaraokeSearch import JoySoundSearchQueryField as QF
 from PyKaraokeSearch import search_clubdam, ClubDamSearchQuery, make_clubDam_responce
 
-from GetKaraokeDBData import getMusic, registMusic, getShareMusic
+from GetKaraokeDBData import getMusic, registMusic, getShareMusic, registShareMusic
 from GetKeyRange import keySearch
 
 app = Flask(__name__)
@@ -80,12 +80,33 @@ def get_key():
         return jsonify({"status": "error", "message": "POST やん..."})
 
 
+# share music 用 api
+
 @app.route('/api/share_music/get', methods=['GET'])
 def get_share_music():
     if request.method != 'GET':
         return jsonify({"status": "error", "message": "GET じゃないやん..."})
 
     result = getShareMusic()
+    return jsonify({"result": result,  "status": "ok"})
+
+
+@app.route('/api/share_music/regist', methods=['POST'])
+def regist_share_music():
+    if request.method != 'POST':
+        return jsonify({"status": "error", "message": "POST じゃないやん..."})
+
+    data = {
+        "title": request.form.get('title'),
+        "hiragana": request.form.get('hiragana'),
+        "artist": request.form.get('artist'),
+        "max_key": request.form.get('max_key'),
+        "is_available_msy": request.form.get('is_available_msy'),
+        "is_available_gil": request.form.get('is_available_gil'),
+        "is_available_fulu": request.form.get('is_available_fulu'),
+    }
+
+    result = registShareMusic(data)
     return jsonify({"result": result,  "status": "ok"})
 
 
