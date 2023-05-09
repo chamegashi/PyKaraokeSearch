@@ -39,9 +39,10 @@ def registShareMusic(music):
         cur = connect.cursor()
 
         date = convertDateToString(datetime.datetime.now())
+        new_id = str(uuid.uuid4())
         cur.execute("INSERT INTO share_musics VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     (
-                        str(uuid.uuid4()),
+                        new_id,
                         music["title"],
                         music["hiragana"],
                         music["artist"],
@@ -53,7 +54,7 @@ def registShareMusic(music):
                         str(date),
                     ))
         connect.commit()
-        return {"result": True, "message": ""}
+        return {"result": new_id, "message": ""}
     except Exception as e:
         print(traceback.format_exc())
         return {"result": False, "message": "--- regist error ---\n" + traceback.format_exc()}
@@ -66,7 +67,7 @@ id, title, hiragana, artist, key, max_key, max_score, user_id
 """
 
 
-def deleteMusic(id):
+def deleteShareMusic(id):
     try:
         connect = psycopg2.connect(
             "host=" + os.getenv('DBHOST') + " " +
@@ -78,7 +79,7 @@ def deleteMusic(id):
 
         cur.execute("DELETE FROM share_musics WHERE id = '" + id + "'")
         connect.commit()
-        return {"result": True, "message": ""}
+        return {"result": id, "message": ""}
     except Exception as e:
         print(traceback.format_exc())
         return {"result": False, "message": "--- delete error ---\n" + traceback.format_exc()}
@@ -116,6 +117,8 @@ def updateMusic(music):
                         music["id"],
                     ))
         connect.commit()
+        records = cur.fetchall()
+        print(records)
         return {"result": True, "message": ""}
     except Exception as e:
         print(traceback.format_exc())
@@ -148,7 +151,7 @@ def updateIsAvailable(music):
                         music["id"],
                     ))
         connect.commit()
-        return {"result": True, "message": ""}
+        return {"result": music["id"] + "_" + str(date), "message": "success"}
     except Exception as e:
         print(traceback.format_exc())
         return {"result": False, "message": "--- update error ---\n" + traceback.format_exc()}
