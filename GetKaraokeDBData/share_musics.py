@@ -85,7 +85,7 @@ def deleteShareMusic(id):
         return {"result": False, "message": "--- delete error ---\n" + traceback.format_exc()}
 
 
-def updateMusic(music):
+def updateShareMusic(music):
     try:
         connect = psycopg2.connect(
             "host=" + os.getenv('DBHOST') + " " +
@@ -98,28 +98,28 @@ def updateMusic(music):
         date = convertDateToString(datetime.datetime.now())
         cur.execute("""
                     UPDATE share_musics
-                        SET music_name = %s,
-                            music_name_hira = %s,
+                        SET title = %s,
+                            hiragana = %s,
                             artist = %s,
-                            key = %s,
                             max_key = %s,
-                            max_score = %s,
+                            is_available_msy = %s,
+                            is_available_gil = %s,
+                            is_available_fulu = %s,
                             modified = %s
                         WHERE id=%s""",
                     (
-                        music["music_name"],
-                        music["music_name_hira"],
+                        music["title"],
+                        music["hiragana"],
                         music["artist"],
-                        music["key"],
                         music["max_key"],
-                        music["max_score"],
+                        music["is_available_msy"],
+                        music["is_available_gil"],
+                        music["is_available_fulu"],
                         str(date),
                         music["id"],
                     ))
         connect.commit()
-        records = cur.fetchall()
-        print(records)
-        return {"result": True, "message": ""}
+        return {"result": music["id"], "message": ""}
     except Exception as e:
         print(traceback.format_exc())
         return {"result": False, "message": "--- update error ---\n" + traceback.format_exc()}
