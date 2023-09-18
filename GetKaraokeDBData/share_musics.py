@@ -94,16 +94,11 @@ def deleteShareMusic(id):
 
 def updateShareMusic(music):
     try:
-        connect = psycopg2.connect(
-            "host=" + os.getenv('DBHOST') + " " +
-            "password=" + os.getenv('DBPASS') + " " +
-            "dbname=" + "karaoke" + " " +
-            "user=" + os.getenv('DBUSER') + " "
-        )
-        cur = connect.cursor()
-
+        connection = makeConnection()
         date = convertDateToString(datetime.datetime.now())
-        cur.execute("""
+        
+        with connection.cursor() as cursor:
+            cursor.execute("""
                     UPDATE share_musics
                         SET title = %s,
                             hiragana = %s,
@@ -113,7 +108,8 @@ def updateShareMusic(music):
                             is_available_gil = %s,
                             is_available_fulu = %s,
                             modified = %s
-                        WHERE id=%s""",
+                        WHERE id=%s
+                    """,
                     (
                         music["title"],
                         music["hiragana"],
@@ -125,7 +121,8 @@ def updateShareMusic(music):
                         str(date),
                         music["id"],
                     ))
-        connect.commit()
+
+        connection.commit()
         return {"result": music["id"], "message": ""}
     except Exception as e:
         print(traceback.format_exc())
@@ -134,22 +131,18 @@ def updateShareMusic(music):
 
 def updateIsAvailable(music):
     try:
-        connect = psycopg2.connect(
-            "host=" + os.getenv('DBHOST') + " " +
-            "password=" + os.getenv('DBPASS') + " " +
-            "dbname=" + "karaoke" + " " +
-            "user=" + os.getenv('DBUSER') + " "
-        )
-        cur = connect.cursor()
-
+        connection = makeConnection()
         date = convertDateToString(datetime.datetime.now())
-        cur.execute("""
+
+        with connection.cursor() as cursor:
+            cursor.execute("""
                     UPDATE share_musics
                         SET is_available_msy = %s,
                             is_available_gil = %s,
                             is_available_fulu = %s,
                             modified = %s
-                        WHERE id=%s""",
+                        WHERE id=%s
+                    """,
                     (
                         music["is_available_msy"],
                         music["is_available_gil"],
@@ -157,7 +150,8 @@ def updateIsAvailable(music):
                         str(date),
                         music["id"],
                     ))
-        connect.commit()
+
+        connection.commit()
         return {"result": music["id"] + "_" + str(date), "message": "success"}
     except Exception as e:
         print(traceback.format_exc())
