@@ -3,21 +3,30 @@ import traceback
 import uuid
 import datetime
 import psycopg2
+import pymysql.cursors
+
 from .ShareMusicFIeld import convertShareMusicDict
 from .date import convertDateToString
 
+def makeConnection():
+    return pymysql.connect(host=os.getenv('DBHOST'),
+                                user=os.getenv('DBUSER'),
+                                password=os.getenv('DBPASS'),
+                                database='karaoke',
+                                charset='utf8mb4',
+                                cursorclass=pymysql.cursors.DictCursor)
+    
 
 def getShareMusic():
-    connect = psycopg2.connect(
-        "host=" + os.getenv('DBHOST') + " " +
-        "password=" + os.getenv('DBPASS') + " " +
-        "dbname=" + "karaoke" + " " +
-        "user=" + os.getenv('DBUSER') + " "
-    )
-    cur = connect.cursor()
+    connection = makeConnection()
+    with connection:
+        with connection.cursor() as cursor:
+            # Create a new record
+            sql = "SELECT * FROM share_musics"
+            cursor.execute(sql)
 
-    cur.execute("SELECT * FROM share_musics")
-    records = cur.fetchall()
+    records = cursor.fetchall()
+    print(records)
     return convertShareMusicDict(records)
 
 
@@ -28,37 +37,35 @@ id, title, hiragana, artist, key, max_key, is_available_msy, is_available_gil, i
 """
 
 
-def registShareMusic(music):
+def registerShareMusic(music):
     try:
-        connect = psycopg2.connect(
-            "host=" + os.getenv('DBHOST') + " " +
-            "password=" + os.getenv('DBPASS') + " " +
-            "dbname=" + "karaoke" + " " +
-            "user=" + os.getenv('DBUSER') + " "
-        )
-        cur = connect.cursor()
-
+        connection = makeConnection()
         date = convertDateToString(datetime.datetime.now())
         new_id = str(uuid.uuid4())
-        cur.execute("INSERT INTO share_musics VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                    (
-                        new_id,
-                        music["title"],
-                        music["hiragana"],
-                        music["artist"],
-                        music["max_key"],
-                        music["is_available_msy"],
-                        music["is_available_gil"],
-                        music["is_available_fulu"],
-                        str(date),
-                        str(date),
-                    ))
-        connect.commit()
+
+
+        with connection.cursor() as cursor:
+            # Create a new record
+            cursor.execute("INSERT INTO share_musics VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+                        (
+                            new_id,
+                            music["title"],
+                            music["hiragana"],
+                            music["artist"],
+                            music["max_key"],
+                            music["is_available_msy"],
+                            music["is_available_gil"],
+                            music["is_available_fulu"],
+                            str(date),
+                            str(date),
+                        ))
+            
+        connection.commit()
+
         return {"result": new_id, "message": ""}
     except Exception as e:
         print(traceback.format_exc())
         return {"result": False, "message": "--- regist error ---\n" + traceback.format_exc()}
-
 
 """_summary_
 

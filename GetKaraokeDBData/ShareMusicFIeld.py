@@ -13,14 +13,14 @@ def convertShareMusicDict(musicArray: List):
     retArray = []
     for music in musicArray:
         retArray.append({
-            "id": music[0],
-            "title": music[1],
-            "hiragana": music[2],
-            "artist": music[3],
-            "max_key": music[4],
-            "is_available_msy": music[5],
-            "is_available_gil": music[6],
-            "is_available_fulu": music[7],
+            "id": music["id"],
+            "title": music["title"],
+            "hiragana": music["hiragana"],
+            "artist": music["artist"],
+            "max_key": music["max_key"],
+            "is_available_msy": music["is_available_msy"],
+            "is_available_gil": music["is_available_gil"],
+            "is_available_fulu": music["is_available_fulu"],
         })
 
     return retArray
