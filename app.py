@@ -5,7 +5,7 @@ from PyKaraokeSearch import search_joysound, JoySoundSearchQuery, make_joysound_
 from PyKaraokeSearch import JoySoundSearchQueryField as QF
 from PyKaraokeSearch import search_clubdam, ClubDamSearchQuery, make_clubDam_responce
 
-from GetKaraokeDBData import getMusic, registMusic, getShareMusic, registShareMusic, updateIsAvailable, deleteShareMusic, updateShareMusic
+from GetKaraokeDBData import getMusic, registMusic, getShareMusic, registerShareMusic, updateIsAvailable, deleteShareMusic, updateShareMusic
 from GetKeyRange import keySearch
 
 app = Flask(__name__)
@@ -91,8 +91,8 @@ def get_share_music():
     return jsonify({"result": result,  "status": "ok"})
 
 
-@app.route('/api/share_music/regist', methods=['POST'])
-def regist_share_music():
+@app.route('/api/share_music/register', methods=['POST'])
+def register_share_music():
     if request.method != 'POST':
         return jsonify({"status": "error", "message": "POST じゃないやん..."})
 
@@ -106,14 +106,14 @@ def regist_share_music():
         "is_available_fulu": request.form.get('is_available_fulu'),
     }
 
-    result = registShareMusic(data)
+    result = registerShareMusic(data)
     return jsonify({"result": result,  "status": "ok"})
 
 
-@app.route('/api/share_music/update', methods=['POST'])
+@app.route('/api/share_music/update', methods=['PUT'])
 def update_share_music():
-    if request.method != 'POST':
-        return jsonify({"status": "error", "message": "POST じゃないやん..."})
+    if request.method != 'PUT':
+        return jsonify({"status": "error", "message": "PUT じゃないやん..."})
 
     data = {
         "id": request.form.get('id'),
@@ -130,10 +130,10 @@ def update_share_music():
     return jsonify({"result": result,  "status": "ok"})
 
 
-@app.route('/api/share_music/update_is_avialable', methods=['POST'])
+@app.route('/api/share_music/update_is_avialable', methods=['PUT'])
 def update_is_avialable():
-    if request.method != 'POST':
-        return jsonify({"status": "error", "message": "POST じゃないやん..."})
+    if request.method != 'PUT':
+        return jsonify({"status": "error", "message": "PUT じゃないやん..."})
 
     data = {
         "id": request.form.get('id'),
@@ -146,10 +146,10 @@ def update_is_avialable():
     return jsonify(result)
 
 
-@app.route('/api/share_music/delete', methods=['POST'])
+@app.route('/api/share_music/delete', methods=['DELETE'])
 def delete_share_music():
-    if request.method != 'POST':
-        return jsonify({"status": "error", "message": "POST じゃないやん..."})
+    if request.method != 'DELETE':
+        return jsonify({"status": "error", "message": "DELETE じゃないやん..."})
 
     result = deleteShareMusic(request.form.get('id'))
     return jsonify(result)
@@ -162,4 +162,4 @@ def after_request(response):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+	app.run(host='0.0.0.0', port=80)

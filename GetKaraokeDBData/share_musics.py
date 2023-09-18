@@ -76,16 +76,12 @@ id, title, hiragana, artist, key, max_key, max_score, user_id
 
 def deleteShareMusic(id):
     try:
-        connect = psycopg2.connect(
-            "host=" + os.getenv('DBHOST') + " " +
-            "password=" + os.getenv('DBPASS') + " " +
-            "dbname=" + "karaoke" + " " +
-            "user=" + os.getenv('DBUSER') + " "
-        )
-        cur = connect.cursor()
+        connection = makeConnection()
 
-        cur.execute("DELETE FROM share_musics WHERE id = '" + id + "'")
-        connect.commit()
+        with connection.cursor() as cursor:
+            cursor.execute("DELETE FROM share_musics WHERE id = '" + id + "'")
+
+        connection.commit()
         return {"result": id, "message": ""}
     except Exception as e:
         print(traceback.format_exc())
