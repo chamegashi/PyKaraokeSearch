@@ -3,30 +3,35 @@ import traceback
 import uuid
 import datetime
 import psycopg2
+from psycopg2.extensions import connection
 import pymysql.cursors
 
 from .ShareMusicFIeld import convertShareMusicDict
 from .date import convertDateToString
 
-def makeConnection():
-    return pymysql.connect(host=os.getenv('DBHOST'),
-                                user=os.getenv('DBUSER'),
-                                password=os.getenv('DBPASS'),
-                                database='karaoke',
-                                charset='utf8mb4',
-                                cursorclass=pymysql.cursors.DictCursor)
-    
+
+def makeConnection() -> connection:
+    return psycopg2.connect(os.getenv("DATABASE_URL"))
+
+
+# def makeConnection():
+#     return pymysql.connect(host=os.getenv('DBHOST'),
+#                            user=os.getenv('DBUSER'),
+#                            password=os.getenv('DBPASS'),
+#                            database='karaoke',
+#                            charset='utf8mb4',
+#                            cursorclass=pymysql.cursors.DictCursor)
+
 
 def getShareMusic():
     connection = makeConnection()
+    records = []
     with connection:
         with connection.cursor() as cursor:
-            # Create a new record
             sql = "SELECT * FROM share_musics"
             cursor.execute(sql)
+            records = cursor.fetchall()
 
-    records = cursor.fetchall()
-    print(records)
     return convertShareMusicDict(records)
 
 
@@ -43,29 +48,29 @@ def registerShareMusic(music):
         date = convertDateToString(datetime.datetime.now())
         new_id = str(uuid.uuid4())
 
-
         with connection.cursor() as cursor:
             # Create a new record
             cursor.execute("INSERT INTO share_musics VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
-                        (
-                            new_id,
-                            music["title"],
-                            music["hiragana"],
-                            music["artist"],
-                            music["max_key"],
-                            music["is_available_msy"],
-                            music["is_available_gil"],
-                            music["is_available_fulu"],
-                            str(date),
-                            str(date),
-                        ))
-            
+                           (
+                               new_id,
+                               music["title"],
+                               music["hiragana"],
+                               music["artist"],
+                               music["max_key"],
+                               music["is_available_msy"],
+                               music["is_available_gil"],
+                               music["is_available_fulu"],
+                               str(date),
+                               str(date),
+                           ))
+
         connection.commit()
 
         return {"result": new_id, "message": ""}
     except Exception as e:
         print(traceback.format_exc())
         return {"result": False, "message": "--- regist error ---\n" + traceback.format_exc()}
+
 
 """_summary_
 
@@ -92,7 +97,7 @@ def updateShareMusic(music):
     try:
         connection = makeConnection()
         date = convertDateToString(datetime.datetime.now())
-        
+
         with connection.cursor() as cursor:
             cursor.execute("""
                     UPDATE share_musics
@@ -106,17 +111,17 @@ def updateShareMusic(music):
                             modified = %s
                         WHERE id=%s
                     """,
-                    (
-                        music["title"],
-                        music["hiragana"],
-                        music["artist"],
-                        music["max_key"],
-                        music["is_available_msy"],
-                        music["is_available_gil"],
-                        music["is_available_fulu"],
-                        str(date),
-                        music["id"],
-                    ))
+                           (
+                               music["title"],
+                               music["hiragana"],
+                               music["artist"],
+                               music["max_key"],
+                               music["is_available_msy"],
+                               music["is_available_gil"],
+                               music["is_available_fulu"],
+                               str(date),
+                               music["id"],
+                           ))
 
         connection.commit()
         return {"result": music["id"], "message": ""}
@@ -139,13 +144,13 @@ def updateIsAvailable(music):
                             modified = %s
                         WHERE id=%s
                     """,
-                    (
-                        music["is_available_msy"],
-                        music["is_available_gil"],
-                        music["is_available_fulu"],
-                        str(date),
-                        music["id"],
-                    ))
+                           (
+                               music["is_available_msy"],
+                               music["is_available_gil"],
+                               music["is_available_fulu"],
+                               str(date),
+                               music["id"],
+                           ))
 
         connection.commit()
         return {"result": music["id"] + "_" + str(date), "message": "success"}
