@@ -110,10 +110,10 @@ def register_share_music():
     return jsonify({"result": result,  "status": "ok"})
 
 
-@app.route('/api/share_music/update', methods=['PUT'])
+@app.route('/api/share_music/update', methods=['POST'])
 def update_share_music():
-    if request.method != 'PUT':
-        return jsonify({"status": "error", "message": "PUT じゃないやん..."})
+    if request.method != 'POST':
+        return jsonify({"status": "error", "message": "POST じゃないやん..."})
 
     data = {
         "id": request.form.get('id'),
@@ -130,10 +130,10 @@ def update_share_music():
     return jsonify({"result": result,  "status": "ok"})
 
 
-@app.route('/api/share_music/update_is_avialable', methods=['PUT'])
+@app.route('/api/share_music/update_is_avialable', methods=['POST'])
 def update_is_avialable():
-    if request.method != 'PUT':
-        return jsonify({"status": "error", "message": "PUT じゃないやん..."})
+    if request.method != 'POST':
+        return jsonify({"status": "error", "message": "POST じゃないやん..."})
 
     data = {
         "id": request.form.get('id'),
@@ -146,10 +146,10 @@ def update_is_avialable():
     return jsonify(result)
 
 
-@app.route('/api/share_music/delete', methods=['PUT'])
+@app.route('/api/share_music/delete', methods=['POST'])
 def delete_share_music():
-    if request.method != 'PUT':
-        return jsonify({"status": "error", "message": "PUT じゃないやん..."})
+    if request.method != 'POST':
+        return jsonify({"status": "error", "message": "POST じゃないやん..."})
 
     result = deleteShareMusic(request.form.get('id'))
     return jsonify(result)
