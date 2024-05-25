@@ -146,10 +146,10 @@ def update_is_avialable():
     return jsonify(result)
 
 
-@app.route('/api/share_music/delete', methods=['DELETE'])
+@app.route('/api/share_music/delete', methods=['PUT'])
 def delete_share_music():
-    if request.method != 'DELETE':
-        return jsonify({"status": "error", "message": "DELETE じゃないやん..."})
+    if request.method != 'PUT':
+        return jsonify({"status": "error", "message": "PUT じゃないやん..."})
 
     result = deleteShareMusic(request.form.get('id'))
     return jsonify(result)
@@ -162,4 +162,4 @@ def after_request(response):
 
 
 if __name__ == "__main__":
-	app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=80)
