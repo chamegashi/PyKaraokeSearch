@@ -5,7 +5,7 @@ from PyKaraokeSearch import search_joysound, JoySoundSearchQuery, make_joysound_
 from PyKaraokeSearch import JoySoundSearchQueryField as QF
 from PyKaraokeSearch import search_clubdam, ClubDamSearchQuery, make_clubDam_responce
 
-from GetKaraokeDBData import getMusic, registMusic, getShareMusic, registerShareMusic, updateIsAvailable, deleteShareMusic, updateShareMusic
+from GetKaraokeDBData import getMusic, getMusicById, registMusic, getShareMusic, registerShareMusic, updateIsAvailable, deleteShareMusic, updateShareMusic
 from GetKeyRange import keySearch
 
 app = Flask(__name__)
@@ -45,6 +45,18 @@ def get_music():
 
     result = getMusic()
     return jsonify({"result": result,  "status": "ok"})
+
+def get_music_by_id():
+    if request.method != 'GET':
+        return jsonify({"status": "error", "message": "GET じゃないやん..."})
+
+    music_id = request.args.get('id')
+    if not music_id:
+        return jsonify({"status": "error", "message": "not found id"})
+
+    result = getMusicById()
+    return jsonify({"result": result,  "status": "ok"})
+
 
 
 @app.route('/api/music/regist', methods=['POST'])
