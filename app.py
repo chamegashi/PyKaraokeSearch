@@ -65,6 +65,25 @@ def regist_music():
     return jsonify({"result": result,  "status": "ok"})
 
 
+@app.route('/api/music/update', methods=['POST'])
+def update_music():
+    if request.method != 'POST':
+        return jsonify({"status": "error", "message": "POST じゃないやん..."})
+
+    data = {
+        "id": request.form.get('id'),
+        "music_name": request.form.get('music_name'),
+        "music_name_hira": request.form.get('music_name_hira'),
+        "artist": request.form.get('artist'),
+        "key": request.form.get('key'),
+        "max_key": request.form.get('max_key'),
+        "max_score": request.form.get('max_score'),
+        "user_id": request.form.get('user_id'),
+    }
+
+    result = updateMusic(data)
+    return jsonify({"result": result,  "status": "ok"})
+
 @app.route('/api/getKey', methods={'GET'})
 def get_key():
     if request.method == 'GET':
