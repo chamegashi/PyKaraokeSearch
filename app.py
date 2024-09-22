@@ -5,7 +5,7 @@ from PyKaraokeSearch import search_joysound, JoySoundSearchQuery, make_joysound_
 from PyKaraokeSearch import JoySoundSearchQueryField as QF
 from PyKaraokeSearch import search_clubdam, ClubDamSearchQuery, make_clubDam_responce
 
-from GetKaraokeDBData import getMusic, getMusicById, registMusic, getShareMusic, registerShareMusic, updateIsAvailable, deleteShareMusic, updateShareMusic
+from GetKaraokeDBData import getMusic, getMusicById, registMusic, updateMusic, getShareMusic, registerShareMusic, updateIsAvailable, deleteShareMusic, updateShareMusic
 from GetKeyRange import keySearch
 
 app = Flask(__name__)
