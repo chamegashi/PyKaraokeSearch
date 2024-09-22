@@ -46,35 +46,22 @@ def get_music():
     result = getMusic()
     return jsonify({"result": result,  "status": "ok"})
 
-def get_music_by_id():
-    if request.method != 'GET':
-        return jsonify({"status": "error", "message": "GET じゃないやん..."})
-
-    music_id = request.args.get('id')
-    if not music_id:
-        return jsonify({"status": "error", "message": "not found id"})
-
-    result = getMusicById()
-    return jsonify({"result": result,  "status": "ok"})
-
-
-
 @app.route('/api/music/regist', methods=['POST'])
 def regist_music():
     if request.method != 'POST':
         return jsonify({"status": "error", "message": "POST じゃないやん..."})
 
     data = {
-        "music_name": request.form.get(),
-        "music_name_hira": request.form.get(),
-        "artist": request.form.get(),
-        "key": request.form.get(),
-        "max_key": request.form.get(),
-        "max_score": request.form.get(),
-        "user_id": request.form.get(),
+        "music_name": request.form.get('music_name'),
+        "music_name_hira": request.form.get('music_name_hira'),
+        "artist": request.form.get('artist'),
+        "key": request.form.get('key'),
+        "max_key": request.form.get('max_key'),
+        "max_score": request.form.get('max_score'),
+        "user_id": request.form.get('user_id'),
     }
 
-    result = registMusic()
+    result = registMusic(data)
     return jsonify({"result": result,  "status": "ok"})
 
 
