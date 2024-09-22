@@ -29,7 +29,7 @@ def getMusicById(music_id):
     )
     cur = connect.cursor()
 
-    cur.execute("SELECT * FROM musics WHERE id=%s", (music_id))
+    cur.execute("SELECT * FROM musics WHERE id='%s'", (music_id))
     records = cur.fetch()
     return convertMusicDict(records)
 
