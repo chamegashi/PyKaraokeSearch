@@ -51,9 +51,10 @@ def registMusic(music):
         cur = connect.cursor()
 
         date = convertDateToString(datetime.datetime.now())
+        music["id"] = str(uuid.uuid4())
         cur.execute("INSERT INTO musics VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
                     (
-                        str(uuid.uuid4()),
+                        music["id"],
                         music["music_name"],
                         music["music_name_hira"],
                         music["artist"],
@@ -65,7 +66,7 @@ def registMusic(music):
                         str(date),
                     ))
         connect.commit()
-        return {"result": True, "message": ""}
+        return {"result": music, "message": ""}
     except Exception as e:
         print(traceback.format_exc())
         return {"result": False, "message": "--- regist error ---\n" + traceback.format_exc()}
@@ -128,7 +129,7 @@ def updateMusic(music):
                         music["id"],
                     ))
         connect.commit()
-        return {"result": True, "message": ""}
+        return {"result": music, "message": ""}
     except Exception as e:
         print(traceback.format_exc())
         return {"result": False, "message": "--- update error ---\n" + traceback.format_exc()}
