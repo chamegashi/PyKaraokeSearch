@@ -20,6 +20,7 @@ def getMusic():
     records = cur.fetchall()
     return convertMusicDict(records)
 
+
 def getMusicById(music_id):
     connect = psycopg2.connect(
         "host=" + os.getenv('DBHOST') + " " +
@@ -32,6 +33,7 @@ def getMusicById(music_id):
     cur.execute("SELECT * FROM musics WHERE id='%s'", (music_id))
     records = cur.fetch()
     return convertMusicDict(records)
+
 
 """_summary_
 

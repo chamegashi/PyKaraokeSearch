@@ -7,6 +7,7 @@ from PyKaraokeSearch import search_clubdam, ClubDamSearchQuery, make_clubDam_res
 
 from GetKaraokeDBData import getMusic, getMusicById, registMusic, updateMusic, getShareMusic, registerShareMusic, updateIsAvailable, deleteShareMusic, updateShareMusic
 from GetKeyRange import keySearch
+from Sake.sake import delete_sake, get_sakes, update_sake
 
 app = Flask(__name__)
 
@@ -46,6 +47,7 @@ def get_music():
     result = getMusic()
     return jsonify({"result": result,  "status": "ok"})
 
+
 @app.route('/api/music/regist', methods=['POST'])
 def regist_music():
     if request.method != 'POST':
@@ -83,6 +85,7 @@ def update_music():
 
     result = updateMusic(data)
     return jsonify({"result": result,  "status": "ok"})
+
 
 @app.route('/api/getKey', methods={'GET'})
 def get_key():
@@ -170,6 +173,48 @@ def delete_share_music():
         return jsonify({"status": "error", "message": "POST じゃないやん..."})
 
     result = deleteShareMusic(request.form.get('id'))
+    return jsonify(result)
+
+#####
+# sake 用 api
+#####
+
+
+@app.route('/api/sake', methods=['GET'])
+def get_sake():
+    result = get_sakes()
+    return jsonify(result)
+
+
+@app.route('/api/sake/delete', methods=['POST'])
+def delete():
+    if request.method != 'POST':
+        return jsonify({"status": "error", "message": "POST じゃないやん..."})
+
+    result = delete_sake(request.form.get('id'))
+    return jsonify(result)
+
+
+@app.route('/api/sake/update', methods=['POST'])
+def update():
+    if request.method != 'POST':
+        return jsonify({"status": "error", "message": "POST じゃないやん..."})
+
+    data = {
+        'id': request.form.get('id'),
+        'name': request.form.get('name'),
+        'degree': request.form.get('degree'),
+        'brewery': request.form.get('brewery'),
+        'prefecture': request.form.get('prefecture'),
+        'drink_location': request.form.get('drink_location'),
+        'image_url': request.form.get('image_url'),
+        'comment': request.form.get('comment'),
+        'rating': request.form.get('rating'),
+        'favorite': request.form.get('favorite'),
+        'price': request.form.get('price'),
+    }
+
+    result = update_sake(data)
     return jsonify(result)
 
 
